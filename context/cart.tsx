@@ -77,6 +77,7 @@ type CartContextValue = {
   updateQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
+  findItem: (id: string) => CartItem | undefined;
 };
 
 export const CartContext = createContext<CartContextValue | null>(null);
@@ -114,6 +115,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "REMOVE_ITEM", payload: { id } }),
     clearCart: () =>
       dispatch({ type: "CLEAR_CART" }),
+    findItem: (id) => state.items.find((item) => item.id === id),
   };
 
   return (
