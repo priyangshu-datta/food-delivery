@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { MenuItem } from '@/menu/types'
+import { useCart } from '@/context/cart'
 
 export default function MenuPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const cart = useCart()
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -73,15 +76,27 @@ export default function MenuPage() {
                 <p className="text-gray-600 text-sm mb-3">{item.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-green-600">${item.price}</span>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200">
-                    Add to Cart
-                  </button>
+                  {cart.findItem(item.id) ?
+                    <div>
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity - 1)}>
+                        -
+                      </button>
+                      <span>{cart.findItem(item.id)!.quantity}</span>
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity + 1)}>
+                        +
+                      </button>
+                    </div>
+                    :
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.addItem(item)}>
+                      Add to Cart
+                    </button>
+                  }
                 </div>
               </div>
             </div>
           ))}
         </div>
-        
+
         {menuItems.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No menu items available at the moment.</p>
