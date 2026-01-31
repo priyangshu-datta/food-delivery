@@ -17,21 +17,20 @@ export const CustomerContext = createContext<CustomerContextValue | null>(null);
 
 const STORAGE_KEY = "customer";
 
-export function CustomerProvider({children}: {children: ReactNode}) {
-    const [customer, setCustomer] = useState<CustomerState | null>(null);
+export function CustomerProvider({ children }: { children: ReactNode }) {
+    const [customer, setCustomer] = useState<CustomerState | null>(() => {
+        if (typeof window === "undefined") return null
 
-    useEffect(()=>{
         try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-                setCustomer(JSON.parse(raw));
-            }
+            const raw = localStorage.getItem(STORAGE_KEY)
+            return raw ? JSON.parse(raw) : null
         } catch {
-            // no customer.
+            return null
         }
-    }, [])
+    })
 
-    useEffect(()=>{
+
+    useEffect(() => {
         if (customer) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(customer));
         }
@@ -50,9 +49,9 @@ export function CustomerProvider({children}: {children: ReactNode}) {
 }
 
 export function useCustomer() {
-    const ctx = useContext(CustomerContext);
-    if (!ctx) {
+    const context = useContext(CustomerContext);
+    if (!context) {
         throw new Error("useCustomer must be used inside CustomerProvider");
     }
-    return ctx;
+    return context;
 }
