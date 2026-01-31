@@ -1,0 +1,37 @@
+[
+  {
+    "id": "2",
+    "name": "Pizza",
+    "image": "/pizza.png",
+    "price": 99,
+    "description": "A delicious pizza"
+  },
+  {
+    "id": "3",
+    "name": "Pasta",
+    "image": "/pasta.png",
+    "price": 75,
+    "description": "A delicious pasta"
+  },
+  {
+    "id": "4",
+    "name": "Salad",
+    "image": "/salad.png",
+    "price": 70,
+    "description": "A delicious salad"
+  },
+  {
+    "id": "5",
+    "name": "Cake",
+    "image": "/cake.png",
+    "price": 100,
+    "description": "A delicious cake"
+  },
+  {
+    "id": "6",
+    "name": "Cola",
+    "image": "/cola.png",
+    "price": 60,
+    "description": "A delicious cola"
+  }
+]

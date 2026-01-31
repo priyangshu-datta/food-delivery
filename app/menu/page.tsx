@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { MenuItem } from '@/menu/types'
 import { useCart } from '@/context/cart'
+import Image from 'next/image'
+import { Plus } from 'lucide-react'
 
 export default function MenuPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
@@ -32,62 +34,68 @@ export default function MenuPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Loading Menu...</h1>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-foreground mb-8">Loading Menu...</h1>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Menu</h1>
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-            Error: {error}
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-foreground mb-8">Menu</h1>
+        <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded">
+          Error: {error}
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Our Menu</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <h1 className="text-3xl font-bold text-foreground mb-8">Our Menu</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {menuItems.map((item) => (
-            <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <div className="aspect-w-16 aspect-h-9">
-                <img
+            <div key={item.id} className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-border">
+              <div className="">
+                <Image
+                  height={192}
+                  width={341}
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = 'https://via.placeholder.com/400x300?text=No+Image'
-                  }}
+                  className="w-full h-48 object-cover bg-transparent"
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-gray-600 text-sm mb-3">{item.description}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{item.name}</h3>
+                <p className="text-muted-foreground text-sm mb-3">{item.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-green-600">${item.price}</span>
+                  <span className="text-2xl font-bold text-green-600 dark:text-green-400">₹{item.price}</span>
                   {cart.findItem(item.id) ?
-                    <div>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity - 1)}>
+                    <div className="flex items-center gap-2 bg-muted rounded-full p-1">
+                      <button 
+                        className="w-8 h-8 rounded-full bg-background shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center text-muted-foreground hover:text-foreground font-semibold border border-border"
+                        onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity - 1)}
+                      >
                         -
                       </button>
-                      <span>{cart.findItem(item.id)!.quantity}</span>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity + 1)}>
+                      <span className="min-w-8 text-center font-semibold text-foreground">
+                        {cart.findItem(item.id)!.quantity}
+                      </span>
+                      <button 
+                        className="w-8 h-8 rounded-full bg-background shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center text-muted-foreground hover:text-foreground font-semibold border border-border"
+                        onClick={() => cart.updateQuantity(item.id, cart.findItem(item.id)!.quantity + 1)}
+                      >
                         +
                       </button>
                     </div>
                     :
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200" onClick={() => cart.addItem(item)}>
+                    <button 
+                      className="bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-primary-foreground font-medium py-2.5 px-5 rounded-full transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg flex items-center gap-2"
+                      onClick={() => cart.addItem({item, quantity: 1})}
+                    >
+                      <Plus/>
                       Add to Cart
                     </button>
                   }
@@ -99,10 +107,9 @@ export default function MenuPage() {
 
         {menuItems.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No menu items available at the moment.</p>
+            <p className="text-muted-foreground text-lg">No menu items available at the moment.</p>
           </div>
         )}
-      </div>
     </div>
   )
 }
