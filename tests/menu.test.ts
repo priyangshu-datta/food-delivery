@@ -1,13 +1,14 @@
-import { menu } from "@/menu/repository"
+
 import { describe, expect, it } from "vitest"
 import { GET } from "@/app/api/menu/route"
+import { menu } from "@/menu/repository"
 
 describe("getMenu", () => {
     it("returns a non-empty menu with valid items", async () => {
-        const menu = await menu.getMenu()
-        expect(menu).toBeDefined()
-        expect(menu.length).toBeGreaterThan(0)
-        for (const item of menu) {
+        const _menu = await menu.getMenu()
+        expect(_menu).toBeDefined()
+        expect(_menu.length).toBeGreaterThan(0)
+        for (const item of _menu) {
             expect(item.id).toBeDefined()
             expect(item.name).toBeDefined()
             expect(item.description).toBeDefined()
