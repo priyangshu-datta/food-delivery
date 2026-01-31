@@ -1,6 +1,6 @@
 # Food Delivery – Order Management Feature
 
-> **Live Demo:** 
+> **Live Demo:** [https://food-delivery-pd.vercel.app/cart](https://food-delivery-pd.vercel.app/cart)
 
 This project implements a simplified **Order Management feature** for a food delivery application. The focus is on correctness, clarity, and explicit trade-offs rather than over-engineering.
 
